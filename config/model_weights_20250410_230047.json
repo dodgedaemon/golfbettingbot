@@ -1,0 +1,10 @@
+{
+  "augusta_fit_weight": 0.25,
+  "sg_composite_fit_weight": 0.25,
+  "course_history_weight": 0.2,
+  "recent_form_weight": 0.1,
+  "driving_dist_weight": 0.1,
+  "driving_acc_weight": 0.1,
+  "datagolf_win_weight": 0.4,
+  "your_model_weight": 0.6
+}
