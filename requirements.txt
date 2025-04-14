@@ -1,0 +1,21 @@
+anyio==4.9.0
+certifi==2025.1.31
+charset-normalizer==3.4.1
+data_golf @ git+https://github.com/coreyjs/data-golf-api.git@5548cdc6709bc6bc894bfd713e5af27d88bb5c9e
+exceptiongroup==1.2.2
+h11==0.14.0
+httpcore==1.0.7
+httpx==0.27.2
+idna==3.10
+numpy==2.2.4
+pandas==2.2.3
+python-dateutil==2.9.0.post0
+pytz==2025.2
+requests==2.32.3
+scipy==1.15.2
+six==1.17.0
+sniffio==1.3.1
+typing_extensions==4.13.1
+tzdata==2025.2
+Unidecode==1.3.8
+urllib3==2.3.0
