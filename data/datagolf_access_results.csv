@@ -1,0 +1,18 @@
+base_url,tested_url,status,status_code,notes
+https://feeds.datagolf.com/get-player-list,https://feeds.datagolf.com/get-player-list?file_format=json&key=27ae4c1d702ce9a899bb4ff56cf9,✅ Success,200,Accessible
+https://feeds.datagolf.com/get-schedule,https://feeds.datagolf.com/get-schedule?tour=all&file_format=json&key=27ae4c1d702ce9a899bb4ff56cf9,✅ Success,200,Accessible
+https://feeds.datagolf.com/field-updates,https://feeds.datagolf.com/field-updates?tour=pga&file_format=json&key=27ae4c1d702ce9a899bb4ff56cf9,✅ Success,200,Accessible
+https://feeds.datagolf.com/preds/get-dg-rankings,https://feeds.datagolf.com/preds/get-dg-rankings?file_format=json&key=27ae4c1d702ce9a899bb4ff56cf9,✅ Success,200,Accessible
+https://feeds.datagolf.com/preds/skill-ratings,https://feeds.datagolf.com/preds/skill-ratings?display=value&file_format=json&key=27ae4c1d702ce9a899bb4ff56cf9,✅ Success,200,Accessible
+https://feeds.datagolf.com/preds/approach-skill,https://feeds.datagolf.com/preds/approach-skill?period=l24&file_format=json&key=27ae4c1d702ce9a899bb4ff56cf9,✅ Success,200,Accessible
+https://feeds.datagolf.com/preds/player-decompositions,https://feeds.datagolf.com/preds/player-decompositions?tour=pga&file_format=json&key=27ae4c1d702ce9a899bb4ff56cf9,✅ Success,200,Accessible
+https://feeds.datagolf.com/preds/live-hole-stats,https://feeds.datagolf.com/preds/live-hole-stats?tour=pga&file_format=json&key=27ae4c1d702ce9a899bb4ff56cf9,✅ Success,200,Accessible
+https://feeds.datagolf.com/preds/in-play,https://feeds.datagolf.com/preds/in-play?tour=pga&odds_format=decimal&file_format=json&key=27ae4c1d702ce9a899bb4ff56cf9,✅ Success,200,Accessible
+https://feeds.datagolf.com/betting-tools/outrights,https://feeds.datagolf.com/betting-tools/outrights?tour=pga&market=win&odds_format=decimal&file_format=json&key=27ae4c1d702ce9a899bb4ff56cf9,✅ Success,200,Accessible
+https://feeds.datagolf.com/betting-tools/matchups,https://feeds.datagolf.com/betting-tools/matchups?tour=pga&market=tournament_matchups&odds_format=decimal&file_format=json&key=27ae4c1d702ce9a899bb4ff56cf9,✅ Success,200,Accessible
+https://feeds.datagolf.com/betting-tools/matchups-all-pairings,https://feeds.datagolf.com/betting-tools/matchups-all-pairings?tour=pga&odds_format=decimal&file_format=json&key=27ae4c1d702ce9a899bb4ff56cf9,✅ Success,200,Accessible
+https://feeds.datagolf.com/preds/pre-tournament,https://feeds.datagolf.com/preds/pre-tournament?tour=pga&odds_format=decimal&file_format=json&key=27ae4c1d702ce9a899bb4ff56cf9,✅ Success,200,Accessible
+https://feeds.datagolf.com/preds/pre-tournament-archive,https://feeds.datagolf.com/preds/pre-tournament-archive?year=2020&odds_format=decimal&file_format=json&key=27ae4c1d702ce9a899bb4ff56cf9,✅ Success,200,Accessible
+https://feeds.datagolf.com/preds/live-tournament-stats,https://feeds.datagolf.com/preds/live-tournament-stats?round=event_avg&display=value&file_format=json&key=27ae4c1d702ce9a899bb4ff56cf9,✅ Success,200,Accessible
+https://feeds.datagolf.com/historical-raw-data/event-list,https://feeds.datagolf.com/historical-raw-data/event-list?file_format=json&key=27ae4c1d702ce9a899bb4ff56cf9,✅ Success,200,Accessible
+https://feeds.datagolf.com/historical-odds/event-list,https://feeds.datagolf.com/historical-odds/event-list?tour=pga&file_format=json&key=27ae4c1d702ce9a899bb4ff56cf9,✅ Success,200,Accessible
