@@ -1,7 +1,7 @@
 from pathlib import Path
-import argparse
 import requests
 import pandas as pd
+import json
 
 DATA_DIR = Path("data")
 API_KEY = "27ae4c1d702ce9a899bb4ff56cf9"
@@ -12,7 +12,7 @@ def normalize_name(name):
 
 def pull_dg_rankings(event: str, year: int):
     url = f"https://feeds.datagolf.com/preds/get-dg-rankings?file_format=json&key={API_KEY}"
-    print("📡 Fetching DataGolf rankings and tour info...")
+    print(f"📡 Fetching DataGolf rankings and tour info for {event} {year}...")
 
     response = requests.get(url)
     if response.status_code != 200:
@@ -34,9 +34,6 @@ def pull_dg_rankings(event: str, year: int):
     print(f"   → data/datagolf_rankings.csv (generic live file)")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--event", required=True, help="Event name, e.g. rbc")
-    parser.add_argument("--year", required=True, type=int, help="Year, e.g. 2025")
-    args = parser.parse_args()
-
-    pull_dg_rankings(args.event, args.year)
+    with open(DATA_DIR / "event_meta.json", "r") as f:
+        meta = json.load(f)
+    pull_dg_rankings(meta["event"], meta["year"])

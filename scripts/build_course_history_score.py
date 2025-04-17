@@ -1,24 +1,31 @@
 from pathlib import Path
 import pandas as pd
+import json
 
-# Updated path
 DATA_DIR = Path("data")
 
-# Load the raw course history CSV
-df = pd.read_csv(DATA_DIR / "course_history_scores.csv")
+# Load event meta to dynamically pick the right file
+with open(DATA_DIR / "event_meta.json", "r") as f:
+    meta = json.load(f)
+    event = meta["event"]
+    year = meta["year"]
 
-# Identify the year columns
-core_cols = ['player_name', 'Events', 'Av Score']
-year_cols = [col for col in df.columns if col not in core_cols]
+input_file = f"incomingform_eventhistory_{event}_{str(year)[-2:]}.csv"
+df = pd.read_csv(DATA_DIR / input_file)
 
-# Use last 3 years for recency weighting
+# Rename "Player" column to "player_name"
+df = df.rename(columns={"Player": "player_name"})
+
+# Identify year columns (e.g. 2024, 2023, ...)
+year_cols = [col for col in df.columns if col != "player_name"]
 recent_years = sorted(year_cols)[-3:]
 
-# Scoring rules
+# Scoring logic
 def score_position(pos):
+    pos = str(pos).strip().replace("^", "")
+    if pos in {"-", "MC", "WD", "DQ"} or pos == "" or pd.isna(pos):
+        return 0
     try:
-        if pos == '-' or pd.isna(pos):
-            return 0
         pos = int(pos)
         if pos == 1:
             return 10
@@ -33,24 +40,25 @@ def score_position(pos):
     except:
         return 0
 
-# Calculate weighted course history score
 def calc_score(row):
-    total = 0
+    total_score = 0
+    event_count = 0
+
     for year in year_cols:
         score = score_position(row[year])
-        weight = 1.25 if year in recent_years else 1.0
-        total += score * weight
-    try:
-        events = int(row['Events'])
-        if events == 0:
-            events = 1
-    except:
-        events = 1
-    return round(total / events, 3)
+        if score > 0:
+            weight = 1.25 if year in recent_years else 1.0
+            total_score += score * weight
+            event_count += 1
 
+    if event_count == 0:
+        return 0
+    return round(total_score / event_count, 3)
+
+# Apply scoring
 df["course_history_score"] = df.apply(calc_score, axis=1)
 
-# Output
+# Output cleaned file
 df_out = df[["player_name", "course_history_score"]]
 df_out.to_csv(DATA_DIR / "course_history_scores_clean.csv", index=False)
 

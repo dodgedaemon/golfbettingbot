@@ -1,6 +1,5 @@
 import requests
 import pandas as pd
-import argparse
 import json
 from pathlib import Path
 
@@ -22,7 +21,7 @@ def pull_predictions(event: str, year: int):
         f"&key={API_KEY}"
     )
 
-    print("📡 Fetching pre-tournament predictions from DataGolf...")
+    print(f"📡 Fetching pre-tournament predictions from DataGolf for {event} {year}...")
     response = requests.get(url)
     if response.status_code != 200:
         print("❌ Error:", response.status_code, response.text)
@@ -37,7 +36,6 @@ def pull_predictions(event: str, year: int):
     for key, value in raw_data.items():
         if isinstance(value, list) and isinstance(value[0], dict) and "player_name" in value[0]:
             df = pd.DataFrame(value)
-            event_name = raw_data.get("event_name", f"{event}{year}").replace(" ", "_").lower()
             break
     else:
         print("❌ Could not find a player array in the JSON.")
@@ -57,9 +55,11 @@ def pull_predictions(event: str, year: int):
     print(f"   → data/tournament_predictions.csv (generic live file)")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--event", required=True, help="Event name, e.g. rbc")
-    parser.add_argument("--year", required=True, type=int, help="Year, e.g. 2025")
-    args = parser.parse_args()
+    # 📁 Load event + year from meta file
+    meta_path = RAW_DIR / "event_meta.json"
+    with open(meta_path, "r") as f:
+        meta = json.load(f)
+    event = meta["event"]
+    year = meta["year"]
 
-    pull_predictions(args.event, args.year)
+    pull_predictions(event, year)

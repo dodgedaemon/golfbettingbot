@@ -1,56 +1,53 @@
-import argparse
 import requests
 import pandas as pd
 from pathlib import Path
+import json
 
 API_KEY = "27ae4c1d702ce9a899bb4ff56cf9"
-RAW_DIR = Path("data")
+URL = f"https://feeds.datagolf.com/betting-tools/outrights?tour=pga&market=win&odds_format=decimal&file_format=json&key={API_KEY}"
+SAVE_PATH = Path("data/bet365_odds.csv")
+EVENT_META_PATH = Path("data/event_meta.json")
 
 def normalize_name(name):
     parts = name.split(",")
     return parts[1].strip() + " " + parts[0].strip() if len(parts) == 2 else name.strip()
 
-def pull_bet365_odds(event: str, year: int):
-    # 🔥 Hardcoded for now (optional: use event_id mapping file)
-    # event_id=14 is for the Masters; can be dynamic later
-    url = (
-        "https://feeds.datagolf.com/betting-tools/outrights"
-        f"?tour=pga&market=win&book=bet365&odds_format=decimal"
-        f"&file_format=json&key={API_KEY}"
-    )
-
+def main():
     print("📡 Fetching Bet365 odds from DataGolf...")
-    response = requests.get(url)
+    response = requests.get(URL)
     if response.status_code != 200:
-        print("❌ Error:", response.status_code, response.text)
-        exit()
+        print(f"❌ Error {response.status_code}: {response.text}")
+        return
 
     data = response.json()
-    odds_data = []
-    for entry in data.get("odds", []):
-        name = entry.get("player_name", "").strip()
-        bet365_odds = entry.get("bet365", None)
-        if name and bet365_odds is not None:
-            odds_data.append({
-                "player_name": normalize_name(name),
-                "bet365_odds": bet365_odds
-            })
+    odds = data.get("odds", [])
+    if not odds:
+        print("⚠️ No odds found in response.")
+        return
 
-    df = pd.DataFrame(odds_data)
+    df = pd.json_normalize(odds, sep="_")
+    df["player_name"] = df["player_name"].apply(normalize_name)
+    df = df[["player_name", "bet365", "datagolf_baseline", "datagolf_baseline_history_fit"]].copy()
+    df = df.rename(columns={
+        "datagolf_baseline": "baseline",
+        "datagolf_baseline_history_fit": "baseline_history_fit"
+    })
 
-    # Save both files
-    out_file = f"bet365_odds_{event.lower()}_{str(year)[-2:]}.csv"
-    df.to_csv(RAW_DIR / out_file, index=False)
-    df.to_csv(RAW_DIR / "bet365_odds.csv", index=False)
+    SAVE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(SAVE_PATH, index=False)
+    print(f"✅ Saved odds for {len(df)} players to {SAVE_PATH}")
 
-    print(f"✅ Saved Bet365 odds for {len(df)} players:")
-    print(f"   → data/{out_file}")
-    print(f"   → data/bet365_odds.csv (generic live file)")
+    # Save event metadata
+    event_name = data.get("event_name", "unknown").lower().replace(" ", "_")
+    event_meta = {
+        "event": event_name,
+        "year": pd.to_datetime(data.get("last_updated")).year
+    }
+
+    EVENT_META_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(EVENT_META_PATH, "w") as f:
+        json.dump(event_meta, f, indent=2)
+    print(f"📝 Saved event meta: {event_meta}")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--event", required=True, help="Event name, e.g. rbc")
-    parser.add_argument("--year", required=True, type=int, help="Year, e.g. 2025")
-    args = parser.parse_args()
-
-    pull_bet365_odds(args.event, args.year)
+    main()

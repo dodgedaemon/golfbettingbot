@@ -1,0 +1,19 @@
+{
+  "event_fit_score_weight": 0.30,
+  "sg_current_form_score_weight": 0.30,
+  "course_history_score_weight": 0.25,
+  "event_fit_components": {
+    "sg_ott": 0.05,
+    "sg_app": 0.4, 
+    "sg_atg": 0.15, 
+    "sg_putt": 0.15, 
+    "sg_t2g": 0.25,
+    "sg_bst": 0.10,
+    "driving_dist": 0.05, 
+    "driving_acc": 0.15
+  },
+  "datagolf_win_weight": 0.3,
+  "your_model_weight": 0.7,
+  "live_datagolf_win_weight": 0.7,
+  "live_your_model_weight": 0.3
+}
